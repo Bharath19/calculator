@@ -5,7 +5,8 @@
   "scripts": {
     "nx": "nx",
     "start": "nx run-many --parallel --target=serve --projects=frontend-app,api-app",
-    "build": "nx run-many --parallel --target=build --projects=frontend-app,api-app"
+    "build": "nx run-many --parallel --target=build --projects=frontend-app,api-app",
+    "test": "nx run-many --parallel --target=test --projects=frontend-app,api-app"
   },
   "private": true,
   "devDependencies": {

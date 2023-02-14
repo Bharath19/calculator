@@ -1,15 +1,15 @@
 import { render } from '@testing-library/react';
 
-import App from './app';
+import Calculator from './calculator';
 
-describe('App', () => {
+describe('Calculator', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<App />);
+    const { baseElement } = render(<Calculator />);
     expect(baseElement).toBeTruthy();
   });
 
   it('should have the title', () => {
-    const { getByText } = render(<App />);
+    const { getByText } = render(<Calculator />);
     expect(getByText(/Calculator/gi)).toBeTruthy();
   });
 });

@@ -1,0 +1,36 @@
+.table {
+    width: 100%;
+}
+
+.cell {
+    cursor: pointer;
+    font-family: arial,sans-serif;
+    text-align: center;
+    line-height: 34px;
+    margin: 4px;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 4px;
+}
+
+.cellNumber {
+    background: #f1f3f4;
+    color: #202124;
+    border: 1px solid #f1f3f4;
+    border-radius: 4px;
+}
+
+.cellAction {
+    background: #dadce0;
+    color: #202124;
+    border: 1px solid #dadce0;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.cellSubmit {
+    background: #4285f4;
+    color: #fff;
+    border: 1px solid #4285f4;
+    border-radius: 4px;
+}

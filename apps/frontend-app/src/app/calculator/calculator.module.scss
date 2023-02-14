@@ -1,0 +1,51 @@
+/*
+ * Replace this with your own classes
+ *
+ * e.g.
+ * .container {
+ * }
+*/
+
+.calculator {
+    width: 50%;
+    margin: 0 auto;
+    max-width: 700px;
+}
+
+.answerSection {
+    width: 98.5%;
+    height: 72px;
+    border: 1px solid #dadce0;
+    border-radius: 8px;
+    margin: auto;
+    padding: 10px 14px 0 10px;
+    box-sizing: border-box;
+    
+}
+
+.answerTop {
+    -webkit-transition: height 0.2s,font-size 0.2s,color 0.2s;
+    width: 100%;
+    height: 20px;
+    color: #70757a;
+    display: table;
+    font-size: 13px;
+    position: relative;
+    table-layout: fixed;
+    text-align: right;
+}
+
+.answerBottom {
+    -webkit-user-select: text;
+    color: unset;
+    float: right;
+    font-family: arial,sans-serif;
+    font-size: 30px;
+    white-space: nowrap;
+}
+
+.title {
+    text-align: center;
+    margin: 0;
+    padding: 10% 25px 25px 25px;
+}

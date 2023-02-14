@@ -1,13 +1,10 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import styles from './app.module.scss';
-import NxWelcome from './nx-welcome';
+import Calculator from './calculator/calculator';
 
 export function App() {
   return (
-    <>
-      <NxWelcome title="frontend-app" />
-      <div />
-    </>
+    <Calculator />
   );
 }
 
