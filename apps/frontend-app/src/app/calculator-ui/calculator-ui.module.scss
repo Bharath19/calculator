@@ -11,6 +11,11 @@
     box-sizing: border-box;
     position: relative;
     border-radius: 4px;
+
+    &:active {
+        background-color: gray;
+        color: white;
+    }
 }
 
 .cellNumber {

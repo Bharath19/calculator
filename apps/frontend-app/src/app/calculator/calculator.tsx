@@ -7,9 +7,10 @@ export interface CalculatorProps {}
 
 export function Calculator(props: CalculatorProps) {
   const [expression, setExpression] = useState('');
+  const [restExpression, setRestExpression] = useState(false);
   const [value, setValue] = useState('');
 
-  const onSubmit = useCallback(async (expression: string) => {
+  const onSubmitHandler = useCallback(async (expression: string) => {
     const rawResponse = await fetch('/api/calculate', {
       method: 'POST',
       headers: {
@@ -21,9 +22,24 @@ export function Calculator(props: CalculatorProps) {
     const { result } = await rawResponse.json();
 
     setValue(result || 0);
+    setExpression(expression+'=')
+    setRestExpression(true);
   }, []);
 
-  // console.log(expression);
+  
+  const onClearHandler = () => {
+    setExpression(''); 
+    setValue('');
+  }
+
+  const onActionHandler = (value: string) => {
+    if(restExpression){
+      setExpression(value);
+      setRestExpression(false);
+    }else{
+      setExpression( expression + value )
+    }
+  }
 
   return (
     <section>
@@ -34,10 +50,10 @@ export function Calculator(props: CalculatorProps) {
           <div className={styles.answerBottom}>{value}</div>
         </div>
         <CalculatorUi
-          onAction={(value) => setExpression(expression + value)}
-          onNumber={(value) => setExpression(expression + value)}
-          onClear={() => setExpression('')}
-          onSubmit={() => onSubmit(expression)}
+          onAction={(value) => onActionHandler(value)}
+          onNumber={(value) => onActionHandler(value)}
+          onClear={() =>  onClearHandler() }
+          onSubmit={() => onSubmitHandler(expression)}
         />
       </div>
     </section>
