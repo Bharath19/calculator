@@ -1,0 +1,12 @@
+# Stage 1 - build app
+FROM node:18.0.0-alpine as node
+WORKDIR /app
+COPY . .
+RUN npm install
+RUN npm run nx build api-app
+
+# Stage 2
+FROM node:18.0.0-alpine
+COPY --from=node /app/dist/apps/api-app ./dist
+COPY --from=node /app/node_modules ./node_modules
+CMD ["node", "dist/main"]

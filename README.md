@@ -19,6 +19,18 @@ Project is created with:
 - Nx Workspace
 - Jest
 
+## Docker Compose
+
+To run this project locally using docker compose
+
+```
+ download the sourcecode
+$ cd calculator
+$ docker compose up
+```
+
+Access the application by http://localhost:8080/ URL
+
 ## Setup
 
 To run this project locally using npm:
@@ -28,4 +40,18 @@ To run this project locally using npm:
 $ cd calculator
 $ npm install
 $ npm start
+```
+
+## Docker Setup
+
+To build and run this project using docker:
+
+```
+ download the sourcecode
+$ cd calculator
+$ docker build -t 'api' -f "apps/api-app/Dockerfile.backend" .
+$ docker run api -p 3333:3333
+
+$ docker build -t 'frontend' -f "apps/frontend-app/Dockerfile.frontend" .
+$ docker run -p 8080:8080 frontend
 ```
