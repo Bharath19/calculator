@@ -29,3 +29,14 @@ $ cd calculator
 $ npm install
 $ npm start
 ```
+
+## Docker Setup
+
+To run this project using docker:
+
+```
+ download the sourcecode
+$ cd calculator
+$ docker build -t 'api' -f "apps/api-app/Dockerfile.backend" .
+$ docker run api -p 3333:3333
+```
