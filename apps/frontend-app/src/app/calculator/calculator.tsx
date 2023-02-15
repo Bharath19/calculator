@@ -19,11 +19,19 @@ export function Calculator(props: CalculatorProps) {
       },
       body: JSON.stringify({ expression }),
     });
-    const { result } = await rawResponse.json();
 
-    setValue(result || 0);
-    setExpression(expression+'=')
-    setRestExpression(true);
+    if (!rawResponse.ok) 
+    {
+      const {message}  = await rawResponse.json();
+      setExpression(message)
+      setValue('');
+      setRestExpression(true);
+    }else{
+      const { result } = await rawResponse.json();
+      setValue(result || 0);
+      setRestExpression(true);
+    }
+ 
   }, []);
 
   
@@ -46,14 +54,14 @@ export function Calculator(props: CalculatorProps) {
       <header><h2 className={styles.title}>Calculator</h2> </header>
       <div className={styles.calculator}>
         <div className={styles.answerSection}>
-          <div className={styles.answerTop}>{expression}</div>
-          <div className={styles.answerBottom}>{value}</div>
+          <div data-testid={'answerTop'} className={styles.answerTop}>{expression}</div>
+          <div data-testid={'answerBottom'} className={styles.answerBottom}>{value}</div>
         </div>
         <CalculatorUi
           onAction={(value) => onActionHandler(value)}
           onNumber={(value) => onActionHandler(value)}
           onClear={() =>  onClearHandler() }
-          onSubmit={() => onSubmitHandler(expression)}
+          onSubmit={() => expression && onSubmitHandler(expression)}
         />
       </div>
     </section>

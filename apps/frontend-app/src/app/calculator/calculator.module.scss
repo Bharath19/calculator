@@ -33,6 +33,7 @@
     position: relative;
     table-layout: fixed;
     text-align: right;
+    transition: height 0.2s,font-size 0.2s,color 0.2s;
 }
 
 .answerBottom {
@@ -42,6 +43,7 @@
     font-family: arial,sans-serif;
     font-size: 30px;
     white-space: nowrap;
+    user-select: text;
 }
 
 .title {

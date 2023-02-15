@@ -83,11 +83,11 @@ const CalculatorUi = ({
             {columns.map((column) => {
               const classNames = getStyles(column.type);
               const callBackFn = getCallBackFn(column.type);
-              // console.log(column.type, classNames)
 
               return (
                 <td key={column.name}>
                   <div
+                    data-testid={column.name}
                     className={classNames}
                     onClick={() => callBackFn(column.value ?? column.name)}
                   >
