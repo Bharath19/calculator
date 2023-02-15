@@ -3,6 +3,7 @@ FROM node:18.0.0-alpine as node
 WORKDIR /app
 COPY . .
 RUN npm install
+RUN npm run nx test api-app
 RUN npm run nx build api-app
 
 # Stage 2
