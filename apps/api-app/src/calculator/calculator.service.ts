@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 
 @Injectable()
 export class CalculatorService {
@@ -20,6 +20,10 @@ export class CalculatorService {
         const num1 = stack.pop();
         const num2 = stack.pop();
 
+        if (num1 == null || num2 == null) {
+          throw new BadRequestException('Invalid Request');
+        }
+
         switch (val) {
           case '+':
             stack.push(num2 + num1);
@@ -40,6 +44,8 @@ export class CalculatorService {
           case '%':
             stack.push(num2 % num1);
             break;
+          default:
+            throw new BadRequestException('Invalid Request');
         }
       }
     }
@@ -113,9 +119,8 @@ export class CalculatorService {
     // convert arithmetic expression to postfix expression
     const postfixExpression = this.infixToPostfix(expression);
     //  evaluate postfix expression
-    console.log(postfixExpression);
-    console.log(this.evaluatePostfix(postfixExpression));
-
+    // console.log(postfixExpression);
+    // console.log(this.evaluatePostfix(postfixExpression));
     return this.evaluatePostfix(postfixExpression);
   }
 }
