@@ -23,8 +23,8 @@ describe('Calculator component', () => {
     );
 
     render(<Calculator />);
-    const button1 = screen.getByTestId('4');
-    fireEvent.click(button1);
+    const button4 = screen.getByTestId('4');
+    fireEvent.click(button4);
     await waitFor(() => expect(screen.getByTestId('answerTop')).toBeInTheDocument());  
     
     const addButton = await screen.getByTestId('+');
