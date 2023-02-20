@@ -124,6 +124,7 @@ describe('Calculator component', () => {
     fireEvent.keyDown(document, { key: 'Enter' });
     await waitFor(() => expect(screen.getByTestId('answerBottom')).toHaveTextContent('9'));
     
+    expect(window.fetch).toHaveBeenCalledTimes(1);
     expect(window.fetch).toHaveBeenCalledWith('/api/calculate', {
       method: 'POST',
       headers: {
@@ -133,7 +134,6 @@ describe('Calculator component', () => {
       body: JSON.stringify({ expression: '1+2(2+2)' }),
     });
 
-    // 'Escape' key
     fireEvent.keyDown(document, { key: 'Escape' });
     await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent(''));
     await waitFor(() =>expect(screen.getByTestId('answerBottom')).toHaveTextContent(''));

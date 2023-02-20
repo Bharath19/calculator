@@ -52,30 +52,30 @@ const Calculator: React.FC<CalculatorProps> = () => {
     },
     [expression, restExpression]
   );
+  
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const key = event.key;
+    const isNumber = /[0-9]/.test(key);
+    const isAction = /[-+*/()=%]/.test(key);
+
+    if (isNumber) {
+      setExpression(expression + key);
+    } else if (isAction) {
+      setExpression(expression + key);
+    } else if (key === 'Enter') {
+      expression && onSubmitHandler(expression);
+    } else if (key === 'Escape') {
+      onClearHandler();
+    }
+  }, [expression, onClearHandler, onSubmitHandler]);
 
   useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key;
-      const isNumber = /[0-9]/.test(key);
-      const isAction = /[-+*/()=%]/.test(key);
-  
-      if (isNumber) {
-        setExpression(expression + key);
-      } else if (isAction) {
-        setExpression(expression + key);
-      } else if (key === 'Enter') {
-        expression && onSubmitHandler(expression);
-      } else if (key === 'Escape') {
-        onClearHandler();
-      }
-    };
-
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [expression, onClearHandler, onSubmitHandler]);
+  }, [handleKeyDown]);
 
   return (
     <section>

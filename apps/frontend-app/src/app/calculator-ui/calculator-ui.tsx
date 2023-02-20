@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import styles from './calculator-ui.module.scss';
 
 export interface CalculatorUiProps {
@@ -56,29 +56,29 @@ const CalculatorUi = ({
     []
   );
 
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      const key = event.key;
-      const isNumber = /[0-9]/.test(key);
-      const isAction = /[-+*/()=%]/.test(key);
-  
-      if (isNumber) {
-        onNumber(key);
-      } else if (isAction) {
-        onAction(key);
-      } else if (key === 'Enter') {
-        onSubmit();
-      } else if (key === 'Escape') {
-        onClear();
-      }
-    };
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const key = event.key;
+    const isNumber = /[0-9]/.test(key);
+    const isAction = /[-+*/()=%]/.test(key);
 
+    if (isNumber) {
+      onNumber(key);
+    } else if (isAction) {
+      onAction(key);
+    } else if (key === 'Enter') {
+      onSubmit();
+    } else if (key === 'Escape') {
+      onClear();
+    }
+  }, [onAction, onClear, onNumber, onSubmit]);
+  
+  useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [onAction, onClear, onNumber, onSubmit]);
+  }, [handleKeyDown]);
 
 
   const getCallBackFn = (type: string): ((value: string) => void) => {
