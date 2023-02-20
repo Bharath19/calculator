@@ -1,53 +1,81 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import CalculatorUi from '../calculator-ui/calculator-ui';
 import styles from './calculator.module.scss';
 
-/* eslint-disable-next-line */
-export interface CalculatorProps {}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface CalculatorProps {}
 
-export function Calculator(props: CalculatorProps) {
+const Calculator: React.FC<CalculatorProps> = () => {
   const [expression, setExpression] = useState('');
-  const [restExpression, setRestExpression] = useState(false);
   const [value, setValue] = useState('');
+  const [restExpression, setRestExpression] = useState(false);
 
   const onSubmitHandler = useCallback(async (expression: string) => {
-    const rawResponse = await fetch('/api/calculate', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ expression }),
-    });
+    try {
+      const rawResponse = await fetch('/api/calculate', {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ expression }),
+      });
 
-    if (!rawResponse.ok) 
-    {
-      const {message}  = await rawResponse.json();
-      setExpression(message)
-      setValue('');
-      setRestExpression(true);
-    }else{
-      const { result } = await rawResponse.json();
-      setValue(result || 0);
-      setRestExpression(true);
+      if (!rawResponse.ok) {
+        const { message } = await rawResponse.json();
+        setExpression(message);
+        setValue('');
+        setRestExpression(true);
+      } else {
+        const { result } = await rawResponse.json();
+        setValue(result || '0');
+        setRestExpression(true);
+      }
+    } catch (error) {
+      console.error(error);
     }
- 
   }, []);
 
-  
-  const onClearHandler = () => {
-    setExpression(''); 
+  const onClearHandler = useCallback(() => {
+    setExpression('');
     setValue('');
-  }
+  }, []);
 
-  const onActionHandler = (value: string) => {
-    if(restExpression){
-      setExpression(value);
-      setRestExpression(false);
-    }else{
-      setExpression( expression + value )
-    }
-  }
+  const onActionHandler = useCallback(
+    (value: string) => {
+      if (restExpression) {
+        setExpression(value);
+        setRestExpression(false);
+      } else {
+        setExpression(expression + value);
+      }
+    },
+    [expression, restExpression]
+  );
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      const key = event.key;
+      const isNumber = /[0-9]/.test(key);
+      const isAction = /[-+*/()=%]/.test(key);
+  
+      if (isNumber) {
+        setExpression(expression + key);
+      } else if (isAction) {
+        setExpression(expression + key);
+      } else if (key === 'Enter') {
+        expression && onSubmitHandler(expression);
+      } else if (key === 'Escape') {
+        onClearHandler();
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [expression, onClearHandler, onSubmitHandler]);
 
   return (
     <section>
@@ -66,6 +94,6 @@ export function Calculator(props: CalculatorProps) {
       </div>
     </section>
   );
-}
+};
 
 export default Calculator;
