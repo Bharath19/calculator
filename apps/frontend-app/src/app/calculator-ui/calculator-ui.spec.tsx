@@ -105,5 +105,5 @@ describe('CalculatorUi', () => {
     fireEvent.click(getByText('='));
     expect(onSubmit).toHaveBeenCalledWith('=');
   });
-
+  
 });

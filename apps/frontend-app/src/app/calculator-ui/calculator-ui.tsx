@@ -1,11 +1,17 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import styles from './calculator-ui.module.scss';
 
 export interface CalculatorUiProps {
   onNumber: (value: string) => void;
   onAction: (value: string) => void;
-  onSubmit: (value: string) => void;
+  onSubmit: () => void;
   onClear: () => void;
+}
+
+interface Button {
+  name: string;
+  type: 'number' | 'action' | 'reset' | 'submit';
+  value?: string;
 }
 
 const CalculatorUi = ({
@@ -14,7 +20,7 @@ const CalculatorUi = ({
   onSubmit,
   onClear,
 }: CalculatorUiProps) => {
-  const layout = useMemo(
+  const layout = useMemo<Button[][]>(
     () => [
       [
         { name: '(', type: 'action' },
@@ -50,7 +56,32 @@ const CalculatorUi = ({
     []
   );
 
-  const getCallBackFn = (type: string) => {
+  const handleKeyDown = useCallback((event: KeyboardEvent) => {
+    const key = event.key;
+    const isNumber = /[0-9]/.test(key);
+    const isAction = /[-+*/()=%]/.test(key);
+
+    if (isNumber) {
+      onNumber(key);
+    } else if (isAction) {
+      onAction(key);
+    } else if (key === 'Enter') {
+      onSubmit();
+    } else if (key === 'Escape') {
+      onClear();
+    }
+  }, [onAction, onClear, onNumber, onSubmit]);
+  
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [handleKeyDown]);
+
+
+  const getCallBackFn = (type: string): ((value: string) => void) => {
     switch (type) {
       case 'action':
         return onAction;
@@ -63,7 +94,7 @@ const CalculatorUi = ({
     }
   };
 
-  const getStyles = (type: string) => {
+  const getStyles = (type: string): string => {
     switch (type) {
       case 'reset':
       case 'action':
@@ -74,6 +105,7 @@ const CalculatorUi = ({
         return [styles.cell, styles.cellNumber].join(' ');
     }
   };
+  
 
   return (
     <table className={styles.table}>

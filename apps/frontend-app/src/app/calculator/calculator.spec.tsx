@@ -86,4 +86,56 @@ describe('Calculator component', () => {
     });
   });
 
+  it('should handle keyboard events', async () => {
+    const mockResponse = { result: 9 };
+    (window as any).fetch = jest.fn(() =>
+      Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(mockResponse),
+      })
+    );
+
+    render(<Calculator />);
+    
+    fireEvent.keyDown(document, { key: '1' });
+    await waitFor(() => expect(screen.getByTestId('answerTop')).toHaveTextContent('1'));
+    
+    fireEvent.keyDown(document, { key: '+' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+'));
+    
+    fireEvent.keyDown(document, { key: '2' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2'));
+
+    fireEvent.keyDown(document, { key: '(' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2('));
+
+    fireEvent.keyDown(document, { key: '2' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2(2'));
+
+    fireEvent.keyDown(document, { key: '+' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2(2+'));
+    
+    fireEvent.keyDown(document, { key: '2' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2(2+2'));
+
+    fireEvent.keyDown(document, { key: ')' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent('1+2(2+2)'));
+
+    fireEvent.keyDown(document, { key: 'Enter' });
+    await waitFor(() => expect(screen.getByTestId('answerBottom')).toHaveTextContent('9'));
+    
+    expect(window.fetch).toHaveBeenCalledTimes(1);
+    expect(window.fetch).toHaveBeenCalledWith('/api/calculate', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ expression: '1+2(2+2)' }),
+    });
+
+    fireEvent.keyDown(document, { key: 'Escape' });
+    await waitFor(() =>expect(screen.getByTestId('answerTop')).toHaveTextContent(''));
+    await waitFor(() =>expect(screen.getByTestId('answerBottom')).toHaveTextContent(''));
+  });
 });
